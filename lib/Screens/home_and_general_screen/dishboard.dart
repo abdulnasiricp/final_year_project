@@ -1,3 +1,4 @@
+import 'package:buildapp/Screens/home_and_general_screen/Bids_full_detiles.dart';
 import 'package:buildapp/Screens/home_and_general_screen/contractor_profile.dart';
 import 'package:buildapp/Utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class Dashboard extends StatefulWidget {
@@ -14,99 +16,81 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final auth = FirebaseAuth.instance;
-  final ref = FirebaseDatabase.instance.ref('Post');
-
+  final ref = FirebaseDatabase.instance.reference().child('Posts');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: const Text('Dashboard'),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Column(mainAxisSize: MainAxisSize.max, children: [
-        FirebaseAnimatedList(
-            query: ref,
-            defaultChild: Text('Loading'),
-            itemBuilder: (context, snapshot, animation, index) {
-              return ListTile(
-                title: Text(snapshot.child('title').value.toString()),
-                // subtitle: Text(snapshot.child('id').value.toString()),
-                trailing: PopupMenuButton(
-                    color: Colors.white,
-                    elevation: 4,
-                    padding: EdgeInsets.zero,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(2))),
-                    icon: Icon(
-                      Icons.more_vert,
-                    ),
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 1,
-                            child: PopupMenuItem(
-                              value: 1,
-                              child: ListTile(
-                                onTap: () {
-                                  Navigator.pop(context);
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: Column(children: [
+          Expanded(
+            child: FirebaseAnimatedList(
+                query: ref.child('Post List'),
+                defaultChild: const Text('Loading'),
+                itemBuilder: (context, snapshot, animation, index) {
+                  return Column(children: [
+                    InkWell(
+                      onTap: (() {
+                        Get.to(BidsFullDetile());
+                      }),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  snapshot.child('_pTitle').value.toString(),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  snapshot.child('_pPrice').value.toString(),
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: const Image(
+                                image: AssetImage('Assets/Images/building.jpg'),
+                                fit: BoxFit.cover,
+                                // width: MediaQuery.of(context).size.width*1,
+                                // height: MediaQuery.of(context).size.height*.25,
 
-                                  ref
-                                      .child(
-                                          snapshot.child('id').value.toString())
-                                      .update({'title': 'nice world'})
-                                      .then((value) {})
-                                      .onError((error, stackTrace) {
-                                        Utils().toastMessage(error.toString());
-                                      });
-                                },
-                                leading: Icon(Icons.edit),
-                                title: Text('Edit'),
+                                // FadeInImage(
+                                // placeholder: 'Assets/Images/wel.PNG',
+                                //  image:  snapshot.child('_pImage').value.toString(),
+                                // ),
                               ),
                             ),
-                          ),
-                          PopupMenuItem(
-                            value: 2,
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.pop(context);
+                          ],
+                        ),
+                      ),
+                    ),
 
-                                // ref.child(snapshot.child('id').value.toString()).update(
-                                //     {
-                                //       'ttitle' : 'hello world'
-                                //     }).then((value){
-                                //
-                                // }).onError((error, stackTrace){
-                                //   Utils().toastMessage(error.toString());
-                                // });
-                                ref
-                                    .child(
-                                        snapshot.child('id').value.toString())
-                                    .remove()
-                                    .then((value) {})
-                                    .onError((error, stackTrace) {
-                                  Utils().toastMessage(error.toString());
-                                });
-                              },
-                              leading: Icon(Icons.delete_outline),
-                              title: Text('Delete'),
-                            ),
-                          ),
-                        ]),
-              );
-            }),
+                    // // Text(snapshot.child('_pTitle').value.toString()),
+                    // Text(snapshot.child('_pLocation').value.toString()),
+                    // Text(snapshot.child('_pCategory').value.toString()),
+                    // Text(snapshot.child('_pPrice').value.toString()),
+                    // Text(snapshot.child('_pPhone').value.toString()),
+                    // Text(snapshot.child('_pDescription').value.toString()),
+                  ]
 
-        // Expanded(
-        //   child: FirebaseAnimatedList(
-        //     query: ref,
-        //     defaultChild: Text('Loading'),
-        //     itemBuilder: (context, snapshot, animation, index) {
-        //       return ListTile(
-        //         title: Text(snapshot.child('title').value.toString()),
-        //       );
-        //     },
-        //   ),
-        // )
-      ]),
+                      // subtitle: Text(snapshot.child('id').value.toString()),
+                      );
+                }),
+          ),
+        ]),
+      ),
     );
   }
 }

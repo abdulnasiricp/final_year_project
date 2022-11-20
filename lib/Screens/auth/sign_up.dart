@@ -1,4 +1,5 @@
 import 'package:buildapp/Screens/auth/sign_in.dart';
+import 'package:buildapp/Screens/home_and_general_screen/Bottom_navigation_bar.dart';
 import 'package:buildapp/Utils/utils.dart';
 import 'package:buildapp/widgets/round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -106,11 +107,6 @@ class _SignInState extends State<SignUp> {
                           EmailValidator(
                               errorText: "Please enter a valid email")
                         ]),
-                        // onChanged: (val) async{
-                        //   // setState(() {
-                        //   //   email = value;
-                        //   // });
-                        // },
                       ),
                     ),
                     SizedBox(
@@ -131,11 +127,6 @@ class _SignInState extends State<SignUp> {
                           RequiredValidator(errorText: "Required*"),
                         ]),
                         obscureText: _isHidden,
-                        // onChanged: (val) {
-                        //   // setState(() {
-                        //   //   password = val;
-                        //   // });
-                        // },
                       ),
                     ),
                     SizedBox(
@@ -171,26 +162,8 @@ class _SignInState extends State<SignUp> {
                                   loading = false;
                                 });
                               });
-                              SignIn();
+                              Get.to(BottomNavigationBarScreen());
                             }
-
-                            // FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            //   email: email, password: password)
-                            //   .then(signedInUser){
-                            //     _firbbase.collection('users')
-                            //     .add({'email': email, 'pass' : password})
-                            //     .then(value){
-                            //       if(signedInUser != null){
-                            //         Navigator.pushNamed(context, 'Home');
-                            //       }
-                            //     })
-                            //   .catchError((e){
-                            //     print(e);
-                            //   });
-                            // })
-                            // .catchError((e){
-                            //     print(e);
-                            //   });
                           },
                         ),
                       ),

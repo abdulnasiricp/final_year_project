@@ -4,6 +4,8 @@ import 'package:buildapp/Screens/home_and_general_screen/contractor_profile.dart
 import 'package:buildapp/Screens/home_and_general_screen/dishboard.dart';
 import 'package:buildapp/Screens/home_and_general_screen/profile.dart';
 import 'package:buildapp/Screens/auth/sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +17,7 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   // This widget is the root of your application.
+  FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,17 +104,26 @@ class _AccountState extends State<Account> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.post_add_rounded),
-                  title: const Text(' posted projects '),
+                  leading: const Icon(Icons.light_mode),
+                  title: const Text(' Light Mode '),
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.changeTheme(ThemeData.light());
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.dark_mode),
+                  title: const Text(' Dark Mode '),
+                  onTap: () {
+                    Get.changeTheme(ThemeData.dark());
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('LogOut'),
                   onTap: () {
-                    Get.to(SignIn());
+                    _auth.signOut().then((value) {
+                      Get.to(SignIn());
+                    });
                   },
                 ),
               ],

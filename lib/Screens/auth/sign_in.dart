@@ -2,6 +2,7 @@ import 'package:buildapp/Screens/auth/login_with_phone_number.dart';
 import 'package:buildapp/Screens/home_and_general_screen/Bottom_navigation_bar.dart';
 import 'package:buildapp/Screens/home_and_general_screen/home.dart';
 import 'package:buildapp/Screens/auth/sign_up.dart';
+import 'package:buildapp/Utils/utils.dart';
 import 'package:buildapp/widgets/round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +44,19 @@ class _SignInState extends State<SignIn> {
       setState(() {
         loading = false;
       });
+    }).then((value) {
+      Utils().toastMessage('Successfully Login');
+      setState(() {
+        loading = false;
+      });
+    }).onError((error, stackTrace) {
+      Utils().toastMessage(error.toString());
+      setState(() {
+        loading = false;
+      });
     });
   }
-  //  .onError((error, stackTrace){
-  //    Utils().toastMessage(error.toString());
 
-  //  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,12 +134,15 @@ class _SignInState extends State<SignIn> {
                       padding: const EdgeInsets.all(15.0),
                       child: FlatButton(
                         onPressed: () {
-                          Get.to(ForgotPass());
+                          Get.to(ForgotPasswordScreen());
                         },
                         textColor: Colors.blue,
-                        child: Text(
-                          'Forgot password !',
-                          style: TextStyle(fontSize: 15.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            'Forgot password !',
+                            style: TextStyle(fontSize: 15.0),
+                          ),
                         ),
                       ),
                     ),
